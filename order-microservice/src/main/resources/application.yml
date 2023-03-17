@@ -1,0 +1,46 @@
+eureka:
+   client:
+      serviceUrl:
+         defaultZone: http://eureka:password@localhost:8761/eureka
+management:
+   endpoint:
+      health:
+         show-details: always
+   endpoints:
+      web:
+         exposure:
+            include: '*'
+   health:
+      circuitbreakers:
+         enabled: true
+
+
+server:
+   port: 8082
+spring:
+   application:
+      name: order-service
+   datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      password: root
+      url: jdbc:mysql://localhost:3306/order-service
+      username: root
+   jpa:
+      hibernate:
+         ddl-auto: update
+   kafka:
+      bootstrap-servers: localhost:9092
+      template:
+         default-topic: notificationTopic
+      producer:
+         key-serializer: org.apache.kafka.common.serialization.StringSerializer
+         value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+# while sending a message from producer to consumer, though we have defined classes
+         properties:
+            '[spring.json.type.mapping]': event:com.rcode.ordermicroservice.event.OrderPlacedEvent
+# ------------------
+# Orphaned comments:
+# ------------------
+# Was at begin of line:39 :# which are for sending message and receive message, from kafka perspective those
+# Was at begin of line:40 :# are two different entities and could not be understood by consumer automatially.
+# Was at begin of line:41 :# We need to define mapping on both consumer and producer side.
